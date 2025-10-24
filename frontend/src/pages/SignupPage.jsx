@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuthStore } from '../store/useAuthStore';
 import BorderAnimatedContainer from '../components/BorderAnimatedContainer';
-import { MailIcon, MessageCircleIcon, UserIcon } from 'lucide-react';
+import { LockIcon, MailIcon, MessageCircleIcon, UserIcon } from 'lucide-react';
 import { LoaderIcon } from 'react-hot-toast';
 import { Link } from 'react-router';
 
@@ -76,7 +76,7 @@ const SignupPage = () => {
                                             Password
                                         </label>
                                         <div className = 'relative'>
-                                            <UserIcon className = 'auth-input-icon' />
+                                            <LockIcon className = 'auth-input-icon' />
                                             <input
                                                 type = "password"
                                                 value = {formData.password}
@@ -144,6 +144,6 @@ const SignupPage = () => {
             </div>
         </div>
     )
-}
+};
 
 export default SignupPage;
