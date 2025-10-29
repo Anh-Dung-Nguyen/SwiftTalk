@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useChatStore } from '../store/useChatStore';
 import { useAuthStore } from '../store/useAuthStore';
 import ChatHeader from './ChatHeader';
@@ -6,13 +6,20 @@ import NoChatHistoryPlaceholder from './NoChatHistoryPlaceholder';
 import MessageInput from './MessageInput';
 import MessagesLoadingSkeleton from './MessagesLoadingSkeleton';
 
-const ChatContainer = () => {
+function ChatContainer () {
     const {selectedUser, getMessagesbyUserId, messages, isMessagesLoading} = useChatStore();
     const {authUser} = useAuthStore();
+    const messageEndRef = useRef(null);
 
     useEffect (() => {
         getMessagesbyUserId(selectedUser._id);
     }, [selectedUser, getMessagesbyUserId]);
+
+    useEffect(() => {
+        if (messageEndRef.current) {
+            messageEndRef.current.scrollIntoView({behavior: "smooth"});
+        }
+    }, [messages]);
 
     return (
         <>
@@ -22,7 +29,7 @@ const ChatContainer = () => {
                 {messages.length > 0 && !isMessagesLoading
                     ? (
                         <div className = 'max-w-3xl mx-auto space-y-6'>
-                            {messages.map(msg => (
+                            {messages.map((msg) => (
                                 <div
                                     key = {msg._id}
                                     className = {`chat ${msg.senderId === authUser._id 
@@ -31,7 +38,8 @@ const ChatContainer = () => {
                                 >
                                     <div className = {`chat-bubble relative ${msg.senderId === authUser._id 
                                         ? "bg-cyan-600 text-white"
-                                        : "bg-slate-800 text-slate-200"}`}>
+                                        : "bg-slate-800 text-slate-200"}`}
+                                    >
                                         {msg.image && (
                                             <img
                                                 src = {msg.image}
@@ -45,11 +53,13 @@ const ChatContainer = () => {
                                             </p>
                                         }
                                         <p className = 'text-xs mt-1 opacity-75 flex items-center gap-1'>
-                                            {new Date(msg.createdAt).toLocaleTimeString([], {hour: "2-digit", minute: "2-digit"})}
+                                            {new Date(msg.createdAt).toLocaleTimeString(undefined, {hour: "2-digit", minute: "2-digit"})}
                                         </p>
                                     </div>
                                 </div>
                             ))}
+
+                            <div ref = {messageEndRef} />
                         </div>
                     ) : isMessagesLoading ? (
                         <MessagesLoadingSkeleton />
