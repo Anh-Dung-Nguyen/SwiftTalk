@@ -55,7 +55,7 @@ function MessageInput() {
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }
-    }
+    };
 
     return (
         <div className = 'p-4 border-t border-slate-700/50'>
